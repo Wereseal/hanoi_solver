@@ -1,16 +1,24 @@
+use std::fmt;
+
+#[derive(PartialEq)]
 pub enum Tower {
     A,
     B,
     C,
 }
 impl Tower {
-    fn get_index(&self) -> usize {
+    fn index(&self) -> usize {
         match &self {
             Tower::A => 0,
             Tower::B => 1,
             Tower::C => 2,
         }
     }
+}
+pub enum MoveError {
+    SourceIsDestination,
+    EmptySource,
+    DestinationTooSmall,
 }
 pub struct TowersOfHanoi {
     ring_count: u32,
@@ -33,6 +41,40 @@ impl TowersOfHanoi {
     pub fn solved(&self) -> bool {
         self.towers.iter().map(|tower| if tower.len() == 0 {0} else {1}).sum::<u8>() <= 1
     }
+    pub fn move_disk(&mut self, origin: Tower, destination: Tower) -> Result<(), MoveError> {
+        if origin == destination {
+            return Err(MoveError::SourceIsDestination);
+        }
+
+        let origin_val: u32 = *self.towers[origin.index()].last().ok_or(MoveError::EmptySource)?;
+
+        if let Some(destination_val) = self.towers[destination.index()].last() && *destination_val < origin_val {
+            return Err(MoveError::DestinationTooSmall);
+        }
+        
+        self.towers[origin.index()].pop();
+        self.towers[destination.index()].push(origin_val);
+
+        return Ok(());
+
+    }
+}
+impl fmt::Display for TowersOfHanoi {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "\nA: ")?;
+        for ring in &self.towers[0] {
+            write!(f, "{}, ", ring)?;
+        }
+        write!(f, "\nB: ")?;
+        for ring in &self.towers[1] {
+            write!(f, "{}, ", ring)?;
+        }
+        write!(f, "\nC: ")?;
+        for ring in &self.towers[2] {
+            write!(f, "{}, ", ring)?;
+        }
+        Ok(())
+    }
 }
 
 #[cfg(test)]
@@ -49,9 +91,9 @@ mod tests {
         let tower_a = Tower::A;
         let tower_b = Tower::B;
         let tower_c = Tower::C;
-        assert_eq!(tower_a.get_index(), 0);
-        assert_eq!(tower_b.get_index(), 1);
-        assert_eq!(tower_c.get_index(), 2);
+        assert_eq!(tower_a.index(), 0);
+        assert_eq!(tower_b.index(), 1);
+        assert_eq!(tower_c.index(), 2);
     }
     #[test]
     fn TowersOfHanoi_constructs_correct() {
