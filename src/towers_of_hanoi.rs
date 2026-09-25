@@ -27,7 +27,6 @@ pub struct Transfer {
     pub origin: Tower,
     pub destination: Tower,
 }
-#[derive(Clone, Copy)]
 pub struct TowersOfHanoi {
     ring_count: u32,
     towers: [Vec<u32>; 3],
