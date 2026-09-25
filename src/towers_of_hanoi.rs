@@ -1,6 +1,6 @@
 use std::fmt;
 
-#[derive(PartialEq)]
+#[derive(PartialEq, Clone, Copy)]
 pub enum Tower {
     A,
     B,
@@ -15,6 +15,7 @@ impl Tower {
         }
     }
 }
+#[derive(Clone, Copy)]
 pub enum TransferError {
     SourceIsDestination,
     EmptySource,
@@ -26,6 +27,7 @@ pub struct Transfer {
     pub origin: Tower,
     pub destination: Tower,
 }
+#[derive(Clone, Copy)]
 pub struct TowersOfHanoi {
     ring_count: u32,
     towers: [Vec<u32>; 3],
