@@ -22,8 +22,8 @@ pub enum TransferError {
 }
 // I don't like using step instead of move but move is a rust keyword. :(
 pub struct Transfer {
-    origin: Tower,
-    destination: Tower,
+    pub origin: Tower,
+    pub destination: Tower,
 }
 pub struct TowersOfHanoi {
     ring_count: u32,
