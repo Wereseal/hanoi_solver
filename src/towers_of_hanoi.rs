@@ -21,6 +21,7 @@ pub enum TransferError {
     DestinationTooSmall,
 }
 // I don't like using step instead of move but move is a rust keyword. :(
+#[derive(Clone, Copy)]
 pub struct Transfer {
     pub origin: Tower,
     pub destination: Tower,
