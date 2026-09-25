@@ -15,6 +15,16 @@ impl Tower {
         }
     }
 }
+impl fmt::Display for Tower{
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match self {
+            Tower::A => write!(f, "A")?,
+            Tower::B => write!(f, "B")?,
+            Tower::C => write!(f, "C")?,
+        }
+        Ok(())
+    }
+}
 #[derive(Clone, Copy)]
 pub enum TransferError {
     SourceIsDestination,
@@ -26,6 +36,12 @@ pub enum TransferError {
 pub struct Transfer {
     pub origin: Tower,
     pub destination: Tower,
+}
+impl fmt::Display for Transfer{
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{} -> {}", self.origin, self.destination)?;
+        Ok(())
+    }
 }
 pub struct TowersOfHanoi {
     ring_count: u32,
@@ -48,7 +64,7 @@ impl TowersOfHanoi {
     pub fn solved(&self) -> bool {
         self.towers.iter().map(|tower| if tower.len() == 0 {0} else {1}).sum::<u8>() <= 1
     }
-    pub fn move_disk(&mut self, transfer: Transfer) -> Result<(), TransferError> {
+    pub fn transfer(&mut self, transfer: Transfer) -> Result<(), TransferError> {
         if transfer.origin == transfer.destination {
             return Err(TransferError::SourceIsDestination);
         }
