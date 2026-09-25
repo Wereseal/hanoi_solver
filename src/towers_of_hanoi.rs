@@ -15,10 +15,15 @@ impl Tower {
         }
     }
 }
-pub enum MoveError {
+pub enum TransferError {
     SourceIsDestination,
     EmptySource,
     DestinationTooSmall,
+}
+// I don't like using step instead of move but move is a rust keyword. :(
+pub struct Transfer {
+    origin: Tower,
+    destination: Tower,
 }
 pub struct TowersOfHanoi {
     ring_count: u32,
@@ -41,19 +46,19 @@ impl TowersOfHanoi {
     pub fn solved(&self) -> bool {
         self.towers.iter().map(|tower| if tower.len() == 0 {0} else {1}).sum::<u8>() <= 1
     }
-    pub fn move_disk(&mut self, origin: Tower, destination: Tower) -> Result<(), MoveError> {
-        if origin == destination {
-            return Err(MoveError::SourceIsDestination);
+    pub fn move_disk(&mut self, transfer: Transfer) -> Result<(), TransferError> {
+        if transfer.origin == transfer.destination {
+            return Err(TransferError::SourceIsDestination);
         }
 
-        let origin_val: u32 = *self.towers[origin.index()].last().ok_or(MoveError::EmptySource)?;
+        let origin_val: u32 = *self.towers[transfer.origin.index()].last().ok_or(TransferError::EmptySource)?;
 
-        if let Some(destination_val) = self.towers[destination.index()].last() && *destination_val < origin_val {
-            return Err(MoveError::DestinationTooSmall);
+        if let Some(destination_val) = self.towers[transfer.destination.index()].last() && *destination_val < origin_val {
+            return Err(TransferError::DestinationTooSmall);
         }
         
-        self.towers[origin.index()].pop();
-        self.towers[destination.index()].push(origin_val);
+        self.towers[transfer.origin.index()].pop();
+        self.towers[transfer.destination.index()].push(origin_val);
 
         return Ok(());
 
