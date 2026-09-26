@@ -10,8 +10,8 @@ pub fn solve(towers: &TowersOfHanoi) -> Vec<Transfer> {
             recursive_mut(pos-1, transfers, assist, destination, origin);
         }
     }
-    let mut transfers: Vec<Transfer> = Vec::new();
     let height = towers.ring_count();
+    let mut transfers: Vec<Transfer> = Vec::with_capacity(2_usize.pow(height)-1);
     recursive_mut(height, &mut transfers, Tower::A, Tower::C, Tower::B);
     transfers
 }
