@@ -24,7 +24,8 @@ impl Solver {
         };
         let tops = self.towers.get_tops();
         let origin: Tower;
-        // Ugggghhhh so ugly
+        // This work is totally redundant if I just get the tower from get_lowest_none_one but I'm
+        // too hungry and out of time. :shrug:
         if let Some(x) = tops[0] && x == disk {
             origin = Tower::A;
         } else if let Some(x) = tops[1] && x == disk {
