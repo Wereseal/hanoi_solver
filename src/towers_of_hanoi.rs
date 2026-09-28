@@ -7,11 +7,18 @@ pub enum Tower {
     C,
 }
 impl Tower {
-    fn index(&self) -> usize {
+    pub fn index(&self) -> usize {
         match &self {
             Tower::A => 0,
             Tower::B => 1,
             Tower::C => 2,
+        }
+    }
+    pub fn next(&self) -> Self {
+        match &self {
+            Tower::A => Tower::B,
+            Tower::B => Tower::C,
+            Tower::C => Tower::A,
         }
     }
 }
@@ -32,7 +39,7 @@ pub enum TransferError {
     DestinationTooSmall,
 }
 // I don't like using step instead of move but move is a rust keyword. :(
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, PartialEq)]
 pub struct Transfer {
     pub origin: Tower,
     pub destination: Tower,
@@ -57,6 +64,9 @@ impl TowersOfHanoi {
     }
     pub fn ring_count(&self) -> u32 {
         self.ring_count
+    }
+    pub fn get_tops(&self) -> [Option<u32>; 3] {
+        [self.towers[0].last().copied(), self.towers[1].last().copied(), self.towers[2].last().copied()]
     }
     pub fn towers(&self) -> &[Vec<u32>; 3] {
         &self.towers
